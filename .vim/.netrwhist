@@ -1,4 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/home/jing/myprojects/selenium'
-let g:netrw_dirhist_2='/home/jing/myprojects/ejext/generator'
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/jing/work/aboss-api2/public/aboss-ui/common/ux'
+let g:netrw_dirhist_2='/Users/jing/work/aboss-api2/config/locales'
+let g:netrw_dirhist_3='/Users/jing/.rvm/gems/ruby-1.9.2-p320/gems/authlogic-3.0.2'
+let g:netrw_dirhist_4='/Users/jing/.rvm/gems/ruby-1.9.2-p320/gems/authlogic-3.0.2/lib'
+let g:netrw_dirhist_5='/Users/jing/.rvm/gems/ruby-1.9.2-p320/gems/authlogic-3.0.2/lib/authlogic'
+let g:netrw_dirhist_6='/Users/jing/work/pmoc_ios/pmoc_ios/app/controllers'
+let g:netrw_dirhist_7='/Users/jing/work/aboss-api2/config'

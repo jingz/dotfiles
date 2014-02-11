@@ -1,4 +1,13 @@
-" My own global customizations
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
+Bundle 'ctrlp'
+
+" ctrlp option
+" let g:ctrlp_working_path_mode = 'c'
+
 set shellcmdflag=-ic
 syntax on
 set nohlsearch
@@ -18,7 +27,7 @@ set smartindent
 set backspace=indent,eol,start
 "set foldlevel=0
 set foldmethod=marker
-"set guifont=ProggyCleanTT:h16
+"set guifont=Monaco:h20
 set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ \ [%l/%L\ (%p%%)
 set encoding=utf8
 "set clipboard+=unnamed
