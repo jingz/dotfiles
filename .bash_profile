@@ -80,10 +80,15 @@ mylog(){
     fi
 }
 
+function d(){
+    echo "dash://$1"
+}
+
 # programs
 alias r='rails '
 alias v='vim '
 alias e='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
+
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias contain=". ~/bashscripts/contain.sh"
 alias dsync='.dropbox-dist/dropbox start &' 
@@ -92,12 +97,19 @@ alias set_mfec_proxy='export http_proxy=http://lpn.mfec.co.th:8080 && export htt
 
 # functions
 alias ext='ruby ~/play/ejext/generator/jxc.rb'
-alias inq='ruby ~/aboss-api2/script/screen/gen_inquiry.rb'
+alias xext='ruby ~/play/ejext4/generator/jxc.rb'
+alias inq='ruby ~/work/aboss-api2/script/screen/gen_inquiry.rb'
 alias egf='ruby ~/aboss-api2/script/ext/rails/grid_for.rb'
 alias eff='ruby ~/aboss-api2/script/ext/rails/form_for.rb'
 alias gin='ruby ~/aboss-api2/script/screen/gen_index.rb'
 alias rcof='ruby ~/coffeescript/cc.rb'
 alias clipit='xclip -sel clip' # use after pipe 
+
+# TMUX -------------------------------------------------------------------------
+alias tm="tmux new-session -n "
+alias tmat="tmux attach-session -t "
+alias tmls="tmux list-sessions"
+alias tmkill="tmux kill-session -t "
 
 # start develop aboss project
 # alias abup='cd ~/aboss-api2/ && sup && subl & cd ~/aboss-api2/ && (google-chrome mail.google.com portal.angstrom.co.th localhost:3000 > /dev/null && r s thin )'
@@ -203,3 +215,6 @@ export PATH=/Applications/Postgres93.app/Contents/MacOS/bin/:$PATH
 
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+
+[ -s "/Users/jing/.nvm/nvm.sh" ] && . "/Users/jing/.nvm/nvm.sh" # This loads nvm
