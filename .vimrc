@@ -4,11 +4,18 @@ set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'ctrlp'
+Bundle 'emmet.vim'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
+Bundle 'rstacruz/sparkup'
+let g:user_emmet_leader_key='<C-f>'
+let g:user_emmet_mode='inv'
 
 " ctrlp option
 " let g:ctrlp_working_path_mode = 'c'
 
-set shellcmdflag=-ic
+" set shellcmdflag=-ic
+colorscheme railscasts
 syntax on
 set nohlsearch
 set nobackup
@@ -43,6 +50,10 @@ set nowrap
 " make CTRL-Y funcation as scroll up in windows
 " unmap <C-Y>
 
+" activate html snipp in erb file
+au BufRead *.erb set ft=erb.html
+
+
 " Map keys on how to move between split panes
 map <silent>,h <C-w>h
 map <silent>,j <C-w>j
@@ -50,13 +61,24 @@ map <silent>,k <C-w>k
 map <silent>,l <C-w>l
 
 let mapleader = "-"
-map - ddp
+
+" tabn
+nmap <leader>1 :tabn 1<CR>
+nmap <leader>2 :tabn 2<CR>
+nmap <leader>3 :tabn 3<CR>
+nmap <leader>4 :tabn 4<CR>
+nmap <leader>5 :tabn 5<CR>
+nmap <leader>6 :tabn 6<CR>
+nmap <leader>7 :tabn 7<CR>
+nmap <leader>8 :tabn 8<CR>
+
 nmap \ dd
-map <space> viw
-map <c-d> dd
-imap <c-d> <esc>ddi
-nnoremap <leader>d dd
-nnoremap <leader>c ddO
+map <leader><space> viw
+"map <c-d> dd
+"imap <c-d> <esc>ddi
+" nnoremap <leader>d dd
+" nnoremap <leader>c ddO
+nmap <leader>d ddp
 
 " NERDTree settings
 let NERDTreeIgnore=['\.vim$', '\~$', '\.pyc$', '\.swp$']
@@ -83,6 +105,121 @@ au FileType ruby set softtabstop=2
 au FileType ruby set shiftwidth=2
 au FileType ruby set commentstring=\ #\ %s
 
+" augroup AutoReloadConfig
+"     autocmd!
+"     autocmd BufWritePre .vimrc echo "reload!"
+"     autocmd BufWritePost .vimrc so % 
+" augroup END
+
+function! StripOutputComment(prefix_cment)
+    " clear old output
+    execute "mark s"
+    execute "%s/\\s\\+" . escape(a:prefix_cment, "/") . ".*//ge"
+    " execute "echo " . substitute('%s', "\s\+#=>.*", '', 'g')
+    execute "'s"
+endfunction
+
+function! Test(lang, print_pattern, cment_pattern)
+    " TODO move to args
+    let l:cmdexecute = a:lang . " " . shellescape(expand('%'))
+    let l:outputs = split(system(l:cmdexecute), "\n")
+
+    let l:cur = 1
+    execute "mark s"
+    execute "normal! G"
+
+    " collect line numbers of printing output
+    let l:nl_print = search(a:print_pattern)
+    let l:last_col = col("$")
+    let l:collection_num_line = []
+    let l:eol_column = []
+    while l:nl_print > 0
+        " echo l:nl_print
+        let l:collection_num_line += [l:nl_print]
+        let l:eol_column += [l:last_col]
+
+        " search next print
+        let l:new_nl_print = search(a:print_pattern)
+        let l:last_col = col("$")
+
+        if l:nl_print < l:new_nl_print
+            let l:nl_print = l:new_nl_print
+        else
+            "reach to the last matche
+            let l:nl_print = 0
+        endif
+    endwhile
+
+    " echo l:collection_num_line
+
+    let l:index = 0
+    for nline in l:collection_num_line
+        execute "normal! " . nline . "G$"
+        while col("$") < max(l:eol_column)
+            execute "normal! A "
+        endwhile
+        set nowrap
+        execute "normal! A  " . a:cment_pattern . " " . l:outputs[l:index]
+        let l:index = l:index + 1
+    endfor
+
+    execute "normal! 's"
+
+    " for output in l:outputs
+    "     execute "normal! " . l:cur . "Go" . output
+    "     let l:cur = l:cur + 3
+    " endfor
+endfunction
+
+" set up event triggering
+function! LearnRb()
+    autocmd!
+    autocmd! BufWritePre <buffer> call StripOutputComment("#=>")
+    autocmd! BufWritePost <buffer> call Test("ruby", "puts", "#=>")
+    echom "Ruby Playgroup has been activated!"
+    "augroup LearnRb
+    "    autocmd!
+    "    autocmd! BufWritePre <buffer> mark s | g/#=>/,$ d
+    "    autocmd! BufWritePost <buffer> execute "$r! $(which ruby) % | sed 's/^/\\#=> /'" | 's
+    "augroup END
+endfunction
+
+function! PlayNode()
+    autocmd!
+    autocmd! BufWritePre <buffer> call StripOutputComment("//=>")
+    autocmd! BufWritePost <buffer> call Test("node", "console.log", "//=>")
+    "augroup PlayNode
+    "    autocmd!
+    "    autocmd! BufWritePre <buffer> mark s | g/\/\/=>/,$ d
+    "    autocmd! BufWritePost <buffer> execute "$r! $(which node) % | sed 's/^/\\/\\/=> /'" | 's
+    "augroup END
+    echom "Node Playground has been activated"
+endfunction
+
+function! LearnPy()
+    autocmd!
+    autocmd! BufWritePre <buffer> call StripOutputComment("#=>")
+    autocmd! BufWritePost <buffer> call Test("python", "print", "#=>")
+    "augroup LearnPy
+    "    autocmd!
+    "    autocmd! BufWritePre <buffer> mark s | g/^#=>/,$ d
+    "    autocmd! BufWritePost <buffer> execute "$r! $(which python) % | sed 's/^/\\#=> /'" | 's
+    "augroup END
+    "echom "Ruby Append Output Active!"
+endfunction
+
+function! Ext()
+    autocmd!
+    autocmd! BufWritePost <buffer> execute "!$(which ruby) ~/play/ejext/generator/jxc.rb %"
+endfunction
+
+function! Xext()
+    autocmd!
+    autocmd! BufWritePost <buffer> execute "!$(which ruby) ~/play/ejext4/generator/jxc.rb % -with-requirejs"
+endfunction
+
+" au FileType ruby call Rb_append_output()
+
 " My own customizations for yaml
 au FileType yaml set textwidth=79
 au FileType yaml set tabstop=2
@@ -90,9 +227,8 @@ au FileType yaml set softtabstop=2
 au FileType yaml set shiftwidth=2
 au FileType yaml set commentstring=\ #\ %s
 
-colorscheme railscasts
-
 filetype plugin on
+
 
 " if &term =~ "xterm"
 "   "256 color --
