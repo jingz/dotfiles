@@ -1,13 +1,20 @@
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'ctrlp'
-Bundle 'emmet.vim'
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-Bundle 'rstacruz/sparkup'
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+"Bundle 'gmarik/vundle'
+"Bundle 'ctrlp'
+"Bundle 'emmet.vim'
+"Bundle 'rizzatti/funcoo.vim'
+"Bundle 'rizzatti/dash.vim'
+"Bundle 'rstacruz/sparkup'
+
+call vundle#end()
+filetype plugin indent on
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:user_emmet_leader_key='<C-f>'
 let g:user_emmet_mode='inv'
 
