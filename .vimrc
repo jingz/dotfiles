@@ -4,8 +4,8 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'posva/vim-vue'
 "Bundle 'gmarik/vundle'
-"Bundle 'ctrlp'
 "Bundle 'emmet.vim'
 "Bundle 'rizzatti/funcoo.vim'
 "Bundle 'rizzatti/dash.vim'
@@ -20,6 +20,8 @@ let g:user_emmet_mode='inv'
 
 " ctrlp option
 " let g:ctrlp_working_path_mode = 'c'
+
+set mouse=a
 
 " set shellcmdflag=-ic
 colorscheme railscasts
@@ -59,7 +61,6 @@ set nowrap
 
 " activate html snipp in erb file
 au BufRead *.erb set ft=erb.html
-
 
 " Map keys on how to move between split panes
 map <silent>,h <C-w>h
@@ -111,6 +112,13 @@ au FileType ruby set tabstop=2
 au FileType ruby set softtabstop=2
 au FileType ruby set shiftwidth=2
 au FileType ruby set commentstring=\ #\ %s
+
+au FileType javascript set softtabstop=2
+au FileType javascript set tabstop=2
+
+au FileType vue set tabstop=2
+au FileType vue set softtabstop=2
+au FileType vue set shiftwidth=2 " when indent adds 2 spaces
 
 " augroup AutoReloadConfig
 "     autocmd!
