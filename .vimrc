@@ -3,30 +3,32 @@ filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
+
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'posva/vim-vue'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mileszs/ack.vim'
+Plugin 'rust-lang/rust.vim'
+Plugin 'gyim/vim-boxdraw'
+Bundle 'dracula/vim'
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-"Plug 'junegunn/fzf.vim'
-"Bundle 'gmarik/vundle'
-"Bundle 'emmet.vim'
+Bundle 'emmet.vim'
 "Bundle 'rizzatti/funcoo.vim'
 "Bundle 'rizzatti/dash.vim'
 "Bundle 'rstacruz/sparkup'
 
 call vundle#end()
+
 filetype plugin indent on
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:user_emmet_leader_key='<C-f>'
-let g:user_emmet_mode='inv'
+"set runtimepath^=~/.vim/bundle/ctrlp.vim
+"let g:user_emmet_leader_key='<C-f>'
+"let g:user_emmet_mode='inv'
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
-nnoremap <Leader>a :Ack!<Space>
 
 nmap ; :Buffers<CR>
 
@@ -37,7 +39,8 @@ set mouse=a
 set mouse=n
 
 " set shellcmdflag=-ic
-colorscheme railscasts
+" colorscheme railscasts
+" colorscheme dracula
 syntax on
 set nohlsearch
 set nobackup
@@ -82,6 +85,11 @@ map <silent>,k <C-w>k
 map <silent>,l <C-w>l
 
 let mapleader = "-"
+
+nnoremap <Leader>a :Ack!<Space>
+
+" [vim-boxdraw plugin] use Alt+Click for block selection
+nnoremap <A-LeftMouse> <LeftMouse><C-V> 
 
 " tabn
 nmap <leader>1 :tabn 1<CR>
@@ -138,7 +146,7 @@ au FileType javascript set softtabstop=2
 au FileType javascript set tabstop=2
 au FileType javascript set shiftwidth=2
 
-au BufRead,BufNewFile *.vue set ft=html
+au BufRead,BufNewFile *.vue set ft=vue
 au FileType vue set tabstop=2
 au FileType vue set softtabstop=2
 au FileType vue set shiftwidth=2 " when indent adds 2 spaces
@@ -257,9 +265,13 @@ function! Xext()
     autocmd! BufWritePost <buffer> execute "!$(which ruby) ~/play/ejext4/generator/jxc.rb % -with-requirejs"
 endfunction
 
-function! SendCmdToTmuxWhenSaved(cmd, pane)
+function! SendCmdToTmuxWhenSaved(cmds, pane)
     let s:pane=a:pane
-    let s:cmd=fnameescape(a:cmd)
+    let s:cmd=''
+    for cmd in a:cmds
+        let s:cmd=s:cmd . fnameescape(cmd) . " C-m "
+    endfor
+    "let s:cmd=fnameescape(a:cmd)
     autocmd!
     autocmd! BufWritePost <buffer> execute "silent !tmux send-keys -t " . s:pane . " " . s:cmd . " C-m" | redraw! | syn off | syn on
 endfunction
