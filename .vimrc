@@ -11,18 +11,11 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'gyim/vim-boxdraw'
-Bundle 'dracula/vim'
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Bundle 'emmet.vim'
-"Bundle 'rizzatti/funcoo.vim'
-"Bundle 'rizzatti/dash.vim'
-"Bundle 'rstacruz/sparkup'
-
 call vundle#end()
 
 filetype plugin indent on
 
-"set runtimepath^=~/.vim/bundle/ctrlp.vim
 "let g:user_emmet_leader_key='<C-f>'
 "let g:user_emmet_mode='inv'
 
@@ -30,17 +23,18 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
+" vim-python enable
+let g:python_highlight_all = 1
+
+" toggle buffers
 nmap ; :Buffers<CR>
 
-" ctrlp option
-" let g:ctrlp_working_path_mode = 'c'
-
-set mouse=a
-set mouse=n
+set mouse=n " Normal mode and Terminal modes
 
 " set shellcmdflag=-ic
 " colorscheme railscasts
 " colorscheme dracula
+
 syntax on
 set nohlsearch
 set nobackup
@@ -49,6 +43,7 @@ set number
 set incsearch
 set ignorecase
 set ruler
+set hidden " hidden buffer of the old file instead remove
 "set paste
 set textwidth=0
 set tabstop=4
@@ -57,6 +52,7 @@ set shiftwidth=4
 set autoindent
 set smartindent
 set backspace=indent,eol,start
+set nowrap
 "set foldlevel=0
 set foldmethod=marker
 "set guifont=Monaco:h20
@@ -65,9 +61,8 @@ set encoding=utf8
 "set clipboard+=unnamed
 "colors wintersday
 filetype plugin indent on
-set cursorline
-set nowrap
-"highlight Cursorline guibg=#333333
+" set cursorline
+" highlight Cursorline guibg=#333333 ctermbg=white ctermfg=None
 "set cursorcolumn
 "highlight Cursorcolumn guibg=#111111
 "let g:netrw altv = 1 " netrw to split new file in the right
@@ -105,9 +100,9 @@ nmap <leader>f :Files<CR>
 nmap <leader>t :Tags<CR>
 
 " toggle last tab
-let g:lasttab = 1
+let s:lasttab = 1
 nmap <leader>- :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
+au TabLeave * let s:lasttab = tabpagenr()
 
 nmap \ dd
 map <leader><space> viw
