@@ -11,6 +11,8 @@ fi
 ###-tns-completion-end-###
 
 # tmux
+alias tmat="tmux attach-session -t "
+
 function mux() {
     case "$1" in
         "zd")
@@ -113,7 +115,7 @@ function mux() {
             cd ~/work/mbot
             tmux new-session -s $project -d
             tmux new-window -s "main"
-            tmux send-keys 'source venv/bin/activate' C-m
+            tmux send-keys 'dc restart' C-m
             tmux -2 a -t $project
         ;;
 
@@ -128,8 +130,27 @@ function mux() {
             tmux -2 a -t $project
         ;;
 
+        "ir")
+            project=$1
+            cd ~/work/internreview
+            tmux new-session -s $project -d
+            tmux new-window -s "main"
+            tmux send-keys 'source venv/bin/activate' C-m
+            tmux -2 a -t $project
+        ;;
+
+        "news")
+            project=$1
+            cd ~/play/news
+            tmux new-session -s $project -d
+            tmux new-window -s "main"
+            tmux send-keys 'source venv/bin/activate' C-m
+            tmux -2 a -t $project
+        ;;
+
+
         *)
-            echo "projects shoud be in (dca, zd, seekster, abacus, agrichain, mbot, dict) list" 
+            echo "projects shoud be in (dca, zd, seekster, abacus, agrichain, mbot, dict, ir) list" 
         ;;
     esac
 }
@@ -138,6 +159,10 @@ function mux() {
 alias q='quasar'
 alias qda='quasar dev -m cordova -T android'
 alias qdi='quasar dev -m cordova -T ios'
+
+# vue-cli
+alias csa='yarn run cordova-serve-android'
+alias csi='yarn run cordova-serve-ios'
 
 # vim
 export EDITOR=vim
@@ -159,12 +184,21 @@ export ES_HOST='http://localhost:9200'
 export MDBICONV='UTF-8'
 export MDB_JET3_CHARSET='CP874'
 
+# Gradle
+export PATH=$PATH:/opt/gradle/gradle-5.3/bin
+
 # Android
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
-# export ANDROID_HOME='/Users/jing/Library/Android/sdk'
 export ANDROID_HOME='/Users/jing/Library/Android/sdk'
+export ANDROID_AVD_HOME=$HOME/.android/avd
 export ANDROID_SDK_ROOT=${ANDROID_HOME}
-export PATH="${PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools"
+export PATH="${PATH}:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools"
+
+# Ruse
+export PATH="${PATH}:$HOME/.cargo/env"
+
+# export ANDROID_HOME=/Development/android-sdk/
+# export PATH=${PATH}:/Development/android-sdk/platform-tools:/Development/android-sdk/tools
 
 # fzf via Homebrew
 if [ -e /usr/local/opt/fzf/shell/completion.bash ]; then
@@ -186,7 +220,7 @@ function unsetproxy () {
 # Python
 export PATH="/usr/local/opt/python/libexec/bin:$PATH" 
 alias aws-scb='ssh ec2-user@54.179.144.183' # dev
-alias aws-scbs='ssh ec2-user@54.169.67.38' # sit
+alias aws-scbs='ssh ec2-user@18.136.152.146' # sit
 
 # Yarn
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
@@ -206,3 +240,11 @@ export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(vim {})+abort'"
 
 alias xdu="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias dc="docker-compose"
+
+# improve ctrl-r
+if [[ -f "$(brew --prefix)/opt/mcfly/mcfly.bash" ]]; then
+  source "$(brew --prefix)/opt/mcfly/mcfly.bash"
+fi
+
+# Flutter
+export PATH="$PATH:~/flutter/bin"

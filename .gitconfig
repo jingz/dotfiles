@@ -1,0 +1,12 @@
+[user]
+	name = jingz
+	email = wsaryoo@gmail.com
+[alias]
+	lg = log --oneline --graph
+    lgx = log --oneline --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	s = status
+	co = checkout
+[core]
+	compression = 1
+[http]
+	postBuffer = 524288000
