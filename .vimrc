@@ -11,16 +11,52 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'gyim/vim-boxdraw'
-Bundle 'emmet.vim'
+Plugin 'ianks/vim-tsx'
+Plugin 'emmet.vim'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'dense-analysis/ale'
+Plugin 'psf/black'
+
+" Snippet
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+
+" JsDoc
+"Move cursor on function keyword line
+"Type :JsDoc to insert JSDoc
+"Insert JSDoc above the function keyword line
+Plugin 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+\}
+
 call vundle#end()
 
+
 filetype plugin indent on
+
+" SnipMate
+let g:snipMate = { 'snippet_version': 1 }
+
+"### ALE config
+let g:ale_fixers = {
+\  '*': ['remove_trailing_lines', 'trim_whitespace'],
+\  'javascript': ['prettier', 'eslint'],
+\  'vue': ['prettier', 'eslint'],
+\  'typescript': ['prettier', 'eslint'],
+\  'python': ['black'],
+\ }
+
+let g:ale_fix_on_save = 1
 
 "let g:user_emmet_leader_key='<C-f>'
 "let g:user_emmet_mode='inv'
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*
 
+"### ag silver search command
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
 " vim-python enable
@@ -34,6 +70,9 @@ set mouse=n " Normal mode and Terminal modes
 " set shellcmdflag=-ic
 " colorscheme railscasts
 " colorscheme dracula
+
+" show who commit the line
+map <silent><Leader>g :call setbufvar(winbufnr(popup_atcursor(systemlist("cd " . shellescape(fnamemodify(resolve(expand('%:p')), ":h")) . " && git log --no-merges -n 1 -L " . shellescape(line("v") . "," . line(".") . ":" . resolve(expand("%:p")))), { "padding": [1,1,1,1], "pos": "botleft", "wrap": 0 })), "&filetype", "git")<CR>
 
 syntax on
 set nohlsearch
@@ -59,8 +98,6 @@ set foldmethod=marker
 set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ \ [%l/%L\ (%p%%)
 set encoding=utf8
 "set clipboard+=unnamed
-"colors wintersday
-filetype plugin indent on
 " set cursorline
 " highlight Cursorline guibg=#333333 ctermbg=white ctermfg=None
 "set cursorcolumn
@@ -83,10 +120,10 @@ let mapleader = "-"
 
 nnoremap <Leader>a :Ack!<Space>
 
-" [vim-boxdraw plugin] use Alt+Click for block selection
-nnoremap <A-LeftMouse> <LeftMouse><C-V> 
+"### Boxdraw config [vim-boxdraw plugin] use Alt+Click for block selection
+nnoremap <A-LeftMouse> <LeftMouse><C-V>
 
-" tabn
+"### tabn
 nmap <leader>1 :tabn 1<CR>
 nmap <leader>2 :tabn 2<CR>
 nmap <leader>3 :tabn 3<CR>
@@ -128,7 +165,7 @@ au FileType python set tabstop=4
 au FileType python set softtabstop=4
 au FileType python set shiftwidth=4
 au FileType python set commentstring=\ #\ %s
-" au FileType python let g:pydiction_location = 'C:/Program\ Files/Vim/vimfiles/ftplugin/python/pydiction/complete-dict' 
+" au FileType python let g:pydiction_location = 'C:/Program\ Files/Vim/vimfiles/ftplugin/python/pydiction/complete-dict'
 
 " My own customizations for ruby programming
 au FileType ruby set textwidth=79
@@ -141,6 +178,10 @@ au FileType javascript set softtabstop=2
 au FileType javascript set tabstop=2
 au FileType javascript set shiftwidth=2
 
+au FileType typescript set softtabstop=2
+au FileType typescript set tabstop=2
+au FileType typescript set shiftwidth=2
+
 au BufRead,BufNewFile *.vue set ft=vue
 au FileType vue set tabstop=2
 au FileType vue set softtabstop=2
@@ -150,7 +191,7 @@ au FileType vue set syntax=javascript
 " augroup AutoReloadConfig
 "     autocmd!
 "     autocmd BufWritePre .vimrc echo "reload!"
-"     autocmd BufWritePost .vimrc so % 
+"     autocmd BufWritePost .vimrc so %
 " augroup END
 
 function! StripOutputComment(prefix_cment)
@@ -290,6 +331,11 @@ fun! BuildPython3Playground()
     echom "Let's play python3"
 endfun
 
+fun! BuildTSPlayground()
+    call BuildPlayground("tsc", "//=>", "console.log")
+    echom "Let's play typescript"
+endfun
+
 filetype plugin on
 
 " reopen a file with the last position
@@ -298,21 +344,12 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+" Black setup
+augroup black_on_save
+  autocmd!
+  autocmd BufWritePre *.py Black
+augroup end
+
 " tips
 " execute a command in another tmux pane when save a file
 " autocmd! BufWritePost <buffer> execute 'silent !tmux send-keys -t " [pane(bottom|top)]' shell-command-here-with-dbl-quoted-escape C-m | redraw!
-
-" if &term =~ "xterm"
-"   "256 color --
-"     let &t_Co=256
-"     " restore screen after quitting
-"     set t_ti=ESC7ESC[rESC[?47h t_te=ESC[?47lESC8
-"   if has("terminfo")
-"     let &t_Sf="\ESC[3%p1%dm"
-"     let &t_Sb="\ESC[4%p1%dm"
-"   else
-"     let &t_Sf="\ESC[3%dm"
-"     let &t_Sb="\ESC[4%dm"
-"   endif
-" endif
-" colorscheme tmrnight
