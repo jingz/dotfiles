@@ -2,12 +2,13 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
+set rtp+=/opt/homebrew/bin/fzf
 
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'posva/vim-vue'
-Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim',
 Plugin 'mileszs/ack.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'gyim/vim-boxdraw'
@@ -16,6 +17,8 @@ Plugin 'emmet.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'dense-analysis/ale'
 Plugin 'psf/black'
+Plugin 'preservim/nerdtree'
+Plugin 'fatih/vim-go'
 
 " Snippet
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -46,7 +49,8 @@ let g:ale_fixers = {
 \  'javascript': ['prettier', 'eslint'],
 \  'vue': ['prettier', 'eslint'],
 \  'typescript': ['prettier', 'eslint'],
-\  'python': ['black'],
+\  'xpython': ['black'],
+\  'go': ['gofmt', 'gopls'],
 \ }
 
 let g:ale_fix_on_save = 1
@@ -88,7 +92,7 @@ set textwidth=0
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set autoindent
+"set autoindent
 set smartindent
 set backspace=indent,eol,start
 set nowrap
@@ -107,6 +111,8 @@ set encoding=utf8
 " make CTRL-Y funcation as scroll up in windows
 " unmap <C-Y>
 
+set shortmess+=F
+set cmdheight=2
 " activate html snipp in erb file
 au BufRead *.erb set ft=erb.html
 
@@ -160,7 +166,7 @@ noremap <silent> <F9> :NERDTreeToggle<CR>
 inoremap jj <Esc>
 
 " My own customizations for python programming
-au FileType python set textwidth=79 "comply with PEP8
+" au FileType python set textwidth=79 "comply with PEP8
 au FileType python set tabstop=4
 au FileType python set softtabstop=4
 au FileType python set shiftwidth=4
@@ -181,6 +187,10 @@ au FileType javascript set shiftwidth=2
 au FileType typescript set softtabstop=2
 au FileType typescript set tabstop=2
 au FileType typescript set shiftwidth=2
+
+au FileType go set softtabstop=2
+au FileType go set tabstop=2
+au FileType go set shiftwidth=2
 
 au BufRead,BufNewFile *.vue set ft=vue
 au FileType vue set tabstop=2
@@ -336,6 +346,16 @@ fun! BuildTSPlayground()
     echom "Let's play typescript"
 endfun
 
+fun! BuildGoPlayground()
+    call BuildPlayground("go run", "//=>", "fmt.Println")
+    echom "Let's play go"
+endfun
+
+fun! BuildLuaPlayground()
+    call BuildPlayground("lua", "--=>", "print")
+    echom "Let's play lua"
+endfun
+
 filetype plugin on
 
 " reopen a file with the last position
@@ -345,10 +365,10 @@ if has("autocmd")
 endif
 
 " Black setup
-augroup black_on_save
-  autocmd!
-  autocmd BufWritePre *.py Black
-augroup end
+" augroup black_on_save
+"   autocmd!
+"   autocmd BufWritePre *.py Black
+" augroup end
 
 " tips
 " execute a command in another tmux pane when save a file

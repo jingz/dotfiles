@@ -129,7 +129,7 @@ function mux() {
 
         "news")
             project=$1
-            cd ~/play/news
+            cd ~/oldmac/play/news
             tmux new-session -s $project -d
             tmux new-window -s "main"
             tmux send-keys 'source venv/bin/activate' C-m
@@ -179,20 +179,30 @@ alias xdu="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias dc="docker compose"
 
 # improve ctrl-r
-if [[ -f "$(brew --prefix)/opt/mcfly/mcfly.bash" ]]; then
-  source "$(brew --prefix)/opt/mcfly/mcfly.bash"
-fi
+# if [[ -f "$(brew --prefix)/opt/mcfly/mcfly.bash" ]]; then
+#   source "$(brew --prefix)/opt/mcfly/mcfly.bash"
+# fi
 
 # utils
+## appsynth -------------------------------------
+export FID="vSQIFXNDNGTL7tcgNevq5WpZIR22"
 function json2env() {
     jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' $1
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
 function db_am_stg() {
     mongosh "mongodb+srv://jing:osgK0fW2UwRsOuO8@allmember-staging-40.w3bpp.mongodb.net/711_allmember_staging"
+}
+
+function ggdb() {
+    psql -h uatapi7elevenio.cqt1lkvbozc1.ap-southeast-1.rds.amazonaws.com \
+         -U miniappapi_admin  \
+         -d miniappapi_staging
+             # password fJ6n8m7DrCpd
+}
+
+function v2gif() {
+    ffmpeg -i $1 \
+    -vf "fps=10,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+    -loop 0 $2
 }
