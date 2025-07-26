@@ -19,7 +19,7 @@ $(VUNDLE_DIR):
 	git clone https://github.com/VundleVim/Vundle.vim.git $(VIM_DIR)/bundle/Vundle.vim
 
 dev-deps:
-	brew install tmux htop reattach-to-user-namespace
+	brew install tmux htop reattach-to-user-namespace the_silver_searcher
 
 install: brew $(VUNDLE_DIR) dev-deps
 	cp .bash_profile .bashrc .vimrc .tmux.conf .gitconfig $(HOME)
