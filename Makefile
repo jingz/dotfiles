@@ -20,9 +20,10 @@ $(VUNDLE_DIR):
 
 dev-deps:
 	brew install tmux htop reattach-to-user-namespace the_silver_searcher
+	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 install: brew $(VUNDLE_DIR) dev-deps
-	cp .bash_profile .bashrc .vimrc .tmux.conf .gitconfig $(HOME)
+	cp .bash_profile .bashrc .vimrc .tmux.conf .gitconfig $(HOME_DIR)
 
 	# install vbundle plugin in vim and quit
 	vim -c "BundleInstall" -c "q" -c "q"

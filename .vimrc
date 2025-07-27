@@ -20,6 +20,8 @@ Plugin 'psf/black'
 Plugin 'preservim/nerdtree'
 Plugin 'fatih/vim-go'
 
+Plugin 'prabirshrestha/vim-lsp'
+
 " Snippet
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
@@ -37,6 +39,24 @@ Plugin 'heavenshell/vim-jsdoc', {
 
 call vundle#end()
 
+" vim-lsp setup for ruff
+if executable('uvx ruff')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'ruff',
+        \ 'cmd': {server_info->['ruff', 'server']},
+        \ 'allowlist': ['python'],
+        \ 'workspace_config': {},
+        \ })
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+    " add your keybindings here (see https://github.com/prabirshrestha/vim-lsp?tab=readme-ov-file#registering-servers)
+
+    let l:capabilities = lsp#get_server_capabilities('ruff')
+    if !empty(l:capabilities)
+      let l:capabilities.hoverProvider = v:false
+    endif
+endfunction
 
 filetype plugin indent on
 
